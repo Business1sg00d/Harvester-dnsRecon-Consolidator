@@ -79,7 +79,6 @@ def json_to_html(sub_domain):
 def main():
     dnspath = sys.argv[1]
     harvest_path = sys.argv[2]
-    files = []
     sub_domain = {}
 
     if not os.path.isdir(dnspath):
