@@ -1,5 +1,5 @@
 # Harvester-dnsRecon-Consolidator
-Take json files in Harvester output directory and dnsrecon directory; combine into one XML/json file. Work in progress.
+Take json files in Harvester output directory and dnsrecon output directory; combine into one HTML file. Work in progress.
 
 Install:
 --------
