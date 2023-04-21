@@ -25,8 +25,12 @@ def dnsreconp(dnspath, sub_domain):
                         if domain not in sub_domain:
                             sub_domain[domain] = []
                         if ":" not in data[i]["address"] and data[i]["address"][0].isdigit():
-                            if data[i]["address"] not in sub_domain[domain]:
-                                sub_domain[domain].append(data[i]["address"])
+                            ip_address = data[i]["address"]
+                        if ip_address not in sub_domain[domain]:
+                            sub_domain[domain].append(ip_address)
+                        if data[i]["name"] and ip_address:
+                            combined_name_ip = data[i]["name"] + " : " + ip_address
+                            sub_domain[domain].append(combined_name_ip)
                 except KeyError:
                     continue
 
@@ -58,6 +62,16 @@ def harvesterp(harvest_path, sub_domain):
                             if ":" not in address and address[0].isdigit():
                                 if address not in sub_domain[domain]:
                                     sub_domain[domain].append(address)
+                            else:
+                                cloud_names = ('aws', 'cloudfront')
+                                for name in cloud_names:
+                                    if name not in address: continue
+                                    else:
+                                        for key, value in sub_domain.items():
+                                            for a_record in value:
+                                                if ":" not in a_record: continue
+                                                if address in a_record: continue
+                                                else: sub_domain[domain].append(address)
             except KeyError:
                 continue
 
