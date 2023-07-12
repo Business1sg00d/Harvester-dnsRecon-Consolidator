@@ -11,6 +11,23 @@ import os
 
 
 
+def nameserver(data, sub_domain):
+    try:
+        if not data["address"]: return sub_domain
+        if ":" not in data["address"] and data["address"][0].isdigit():
+            ip_address_ns = data["address"]
+        if "ip_address_ns" not in locals(): return sub_domain
+        if ip_address_ns not in sub_domain[data["domain"]]:
+            combined_name_ip = "NameServer" + " -> " + data["target"] + ":" + ip_address_ns
+            sub_domain[data["domain"]].append(combined_name_ip)
+    except UnboundLocalError:
+        breakpoint()
+
+    return sub_domain
+
+
+
+
 #   Takes json files in dnsrecon directory path and consolidates IPv4 addresses and subdomains into "sub_domain"
 def dnsreconp(dnspath, sub_domain):
     for file in os.listdir(dnspath):
@@ -24,6 +41,9 @@ def dnsreconp(dnspath, sub_domain):
                         domain = data[i]["domain"]
                         if domain not in sub_domain:
                             sub_domain[domain] = []
+                        if data[i]["type"] == "NS":
+                            nameserver(data[i], sub_domain)
+                            continue
                         if ":" not in data[i]["address"] and data[i]["address"][0].isdigit():
                             ip_address = data[i]["address"]
                         if ip_address not in sub_domain[domain]:
